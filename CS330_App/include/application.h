@@ -3,6 +3,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <shader.h>
 
 #include <mesh.h>
 
@@ -24,7 +25,7 @@ private:
     GLFWwindow* _window { nullptr };
 
     std::vector<Mesh> _meshes;
-
+    Shader _shader;
     bool _running { false };
 
 };

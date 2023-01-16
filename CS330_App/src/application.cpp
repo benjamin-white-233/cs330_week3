@@ -102,6 +102,8 @@ void Application::setupScene() {
         2, 3, 4,
     };
 
+    Path shaderPath = std::filesystem::current_path() / "shaders";
+    _shader = Shader( shaderPath / "basic_shader.vert" , shaderPath / "basic_shader.frag");
     // appending vertices and elements to back of our mesh vector
     _meshes.emplace_back(std::move(vertices), std::move(elements));
 
@@ -115,6 +117,8 @@ bool Application::draw() {
     // background color
     glClearColor(0.f, 0.f, 0.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    _shader.Bind();
 
     // draw each mesh
     for (auto mesh : _meshes) {
