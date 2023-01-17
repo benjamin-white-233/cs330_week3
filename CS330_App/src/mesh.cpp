@@ -1,7 +1,7 @@
 #include <mesh.h>
 #include <iostream>
 
-Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<uint32_t>&& elements) {
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& elements) {
     // create the triangle
     glGenVertexArrays(1, &_vertexArrayObject);
     glGenBuffers(1, &_vertexBufferObject);

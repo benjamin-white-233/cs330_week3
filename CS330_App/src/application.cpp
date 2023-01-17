@@ -2,6 +2,7 @@
 #include <iostream>
 #include <types.h>
 #include <vector>
+#include <glm/gtc/matrix_transform.hpp>
 
 Application::Application(std::string WindowTitle, int width, int height) : _applicationName{ WindowTitle }, _width{ width }, _height{ height } {}
 
@@ -50,10 +51,15 @@ bool Application::openWindow() {
 
     // sets _widow to the current thread
     glfwMakeContextCurrent(_window);
+    glfwSetWindowUserPointer(_window, (void*)this);
 
     // adjusting the viewport if window is resized
     glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
         glViewport(0, 0, width, height);
+
+        auto app = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
+        app->_width = width;
+        app->_height = height;
     });
 
     // if GLAD cannot be loaded, return false
@@ -62,50 +68,19 @@ bool Application::openWindow() {
         glfwTerminate();
         return false;
     }
+
+    glEnable(GL_DEPTH_TEST);
+
     // otherwise, return true
     return true;
 }
 
 
 void Application::setupScene() {
-    std::vector<Vertex> vertices = {
-            {
-                    // 0
-                    .Position = {-1.f, 1.f, 0.f},
-                    .Color = {1.f, 0.f, 0.f}
-            },
-            {
-                    // 1
-                    .Position = {-1.f, 0.f, 0.f},
-                    .Color = {0.f, 0.f, 0.5f}
-            },
-            {
-                    // 2
-                    .Position = {-0.5f, 0.f, 0.f},
-                    .Color = {0.f, 1.f, 0.f}
-            },
-            {
-                    // 3
-                    .Position = {0.f, -1.f, 0.f},
-                    .Color = {0.f, 1.f, 0.f}
-            },
-            {
-                    // 4
-                    .Position = {0.f, 0.f, 0.f},
-                    .Color = {1.f, 0.f, 0.f}
-            }
-    };
-
-    // identifying the order of vertices to access
-    std::vector<uint32_t> elements {
-        0, 1, 2,
-        2, 3, 4,
-    };
+    _meshes.emplace_back(Shapes::cubeVertices, Shapes::cubeElements);
 
     Path shaderPath = std::filesystem::current_path() / "shaders";
     _shader = Shader( shaderPath / "basic_shader.vert" , shaderPath / "basic_shader.frag");
-    // appending vertices and elements to back of our mesh vector
-    _meshes.emplace_back(std::move(vertices), std::move(elements));
 
 }
 
@@ -116,12 +91,21 @@ bool Application::update() {
 bool Application::draw() {
     // background color
     glClearColor(0.f, 0.f, 0.f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm::mat4 view = glm::lookAt(glm::vec3(0.f, 1.f, -3.f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    glm::mat4 projection = glm::perspective(glm::radians(75.f), (float)_width / (float)_height, 0.1f, 100.f);
 
     _shader.Bind();
+    _shader.SetMat4("projection", projection);
+    _shader.SetMat4("view", view);
 
     // draw each mesh
-    for (auto mesh : _meshes) {
+    for (auto& mesh : _meshes) {
+        mesh.Transform = glm::rotate(mesh.Transform, glm::radians(1.f), glm::vec3(0, 1, 0));
+        mesh.Transform = glm::rotate(mesh.Transform, glm::radians(1.f), glm::vec3(1, 0, 0));
+
+        _shader.SetMat4("model", mesh.Transform);
         mesh.Draw();
     }
 
