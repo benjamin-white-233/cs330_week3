@@ -151,4 +151,119 @@ struct Shapes {
         20, 21, 23, 21, 22, 23 // bottom
 
     };
+
+    static inline std::vector<Vertex> pyramidVertices {
+            // front
+            // 0
+            {
+                    .Position = {-0.5f, -0.5f, -0.5f},
+                    .Color = {1.f, 0.5f, 0.5f}
+            },
+            // 1
+            {
+                    .Position = {0.5f, -0.5f, -0.5f},
+                    .Color = {0.5f, 1.f, 0.5f}
+            },
+            // top point
+            // 2
+            {
+                    .Position = {0.0f, 0.5f, 0.0f},
+                    .Color = {0.5f, 0.5f, 1.f}
+
+            },
+            // right
+            // 3
+            {
+                    .Position = {0.5f, -0.5f, 0.5f},
+                    .Color = {0.5f, 0.5f, 0.5f}
+            },
+            // 4
+            {
+                    .Position = {-0.5f, -0.5f, 0.5f},
+                    .Color = {0.5f, 0.5f, 0.5f}
+            },
+//            // 5
+//            {
+//                    .Position = {0.5f, -0.5f, -0.5f},
+//                    .Color = {0.5f, 0.5f, 0.5f}
+//            },
+//
+//            // back
+//            // 6
+//            {
+//                    .Position = {0.5f, 0.5f, -0.5f},
+//                    .Color = {1.f, 1.f, 0.5f}
+//            },
+//            // 7
+//            {
+//                    .Position = {0.5f, -0.5f, -0.5f},
+//                    .Color = {1.f, 1.f, 0.5f}
+//            },
+//            // 8
+//            {
+//                    .Position = {-0.5f, -0.5f, -0.5f},
+//                    .Color = {1.f, 1.f, 0.5f}
+//            },
+//
+//            // left
+//            // 9
+//            {
+//                    .Position = {-0.5f, 0.5f, -0.5f},
+//                    .Color = {0.f, 0.5f, 0.f}
+//            },
+//            // 10
+//            {
+//                    .Position = {-0.5f, -0.5f, -0.5f},
+//                    .Color = {0.f, 0.5f, 0.f}
+//            },
+//            // 11
+//
+//            {
+//                    .Position = {-0.5f, 0.5f, 0.5f},
+//                    .Color = {0.f, 0.5f, 0.f}
+//            },
+//            // top
+//            // 12
+//            {
+//                    .Position = {-0.5f, 0.5f, -0.5f},
+//                    .Color = {0.f, 1.f, 0.f}
+//            },
+//
+//            // 13
+//            {
+//                    .Position = {0.5f, 0.5f, 0.5f},
+//                    .Color = {0.f, 1.f, 0.f}
+//            },
+//
+//            // bottom
+//            // 14
+//            {
+//                    .Position = {0.5f, -0.5f, 0.5f},
+//                    .Color = {0.f, 0.5f, 0.f}
+//            },
+//            // 15
+//            {
+//                    .Position = {0.5f, -0.5f, -0.5f},
+//                    .Color = {0.f, 0.5f, 0.f}
+//
+//            },
+//            // 16
+//            {
+//                    .Position = {-0.5f, -0.5f, -0.5f},
+//                    .Color = {0.f, 0.5f, 0.f}
+//            },
+
+    };
+
+    static inline std::vector<uint32_t> pyramidElements {
+           0, 1, 2,
+           1, 3, 2,
+           3, 4, 2,
+           4, 0, 2,
+           0, 3, 2,
+            0, 3, 4,
+            0, 1, 3
+
+
+    };
 };
