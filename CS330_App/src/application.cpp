@@ -77,10 +77,9 @@ bool Application::openWindow() {
 
 
 void Application::setupScene() {
-//    _meshes.emplace_back(Shapes::cubeVertices, Shapes::cubeElements);
     _meshes.emplace_back(Shapes::pyramidVertices, Shapes::pyramidElements);
 
-
+    // declaring paths to shaderfiles
     Path shaderPath = std::filesystem::current_path() / "shaders";
     _shader = Shader( shaderPath / "basic_shader.vert" , shaderPath / "basic_shader.frag");
 
@@ -95,19 +94,19 @@ bool Application::draw() {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 view = glm::lookAt(glm::vec3(1.f, 1.f, -3.f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    // set model view projection matrix
+    glm::mat4 view = glm::lookAt(glm::vec3(1.f, 0.5f, -2.f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 projection = glm::perspective(glm::radians(75.f), (float)_width / (float)_height, 0.1f, 100.f);
+    glm::mat4 model = glm::mat4 { 1.f };
 
+    // set matrices in the shader
     _shader.Bind();
     _shader.SetMat4("projection", projection);
     _shader.SetMat4("view", view);
+    _shader.SetMat4("model", model);
 
     // draw each mesh
     for (auto& mesh : _meshes) {
-        mesh.Transform = glm::rotate(mesh.Transform, glm::radians(1.f), glm::vec3(0, 1, 0));
-//        mesh.Transform = glm::rotate(mesh.Transform, glm::radians(1.f), glm::vec3(1, 0, 0));
-
-        _shader.SetMat4("model", mesh.Transform);
         mesh.Draw();
     }
 
